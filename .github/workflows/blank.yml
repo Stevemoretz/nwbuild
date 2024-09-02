@@ -15,21 +15,24 @@ jobs:
 
     - name: Set up Node.js
       uses: actions/setup-node@v2
-#      with:
-#        node-version: '5.9.0'  # Node.js version compatible with NW.js 0.13.0
-
-    - name: Run microsoft
-      run: npm install --global --production windows-build-tools
+      with:
+        node-version: '5.9.0'  # Node.js version compatible with NW.js 0.13.0
 
     - name: Install nw-gyp
       run: npm install -g nw-gyp
 
     - name: Install SQLite3
       run: |
-        npm install sqlite3@3 --build-from-source --target=0.13.0 --arch=ia32 --runtime=node-webkit
+        npm install sqlite3@3.1.13 --build-from-source --target=0.13.0 --arch=ia32 --runtime=node-webkit || exit 1
 
-#    - name: Build SQLite
-#      run: |
-#        cd node_modules/sqlite3
-#        nw-gyp configure --target=0.10.5 --arch=ia32
-#        nw-gyp build --target=0.10.5 --arch=ia32
+    - name: Build SQLite
+      run: |
+        cd node_modules/sqlite3
+        nw-gyp configure --target=0.10.5 --arch=ia32 || exit 1
+        nw-gyp build --target=0.10.5 --arch=ia32 || exit 1
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: sqlite3-binaries
+        path: node_modules/sqlite3/lib/binding/node-webkit-v0.10.5-win32-ia32/
