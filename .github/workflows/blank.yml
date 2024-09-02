@@ -18,6 +18,9 @@ jobs:
 #      with:
 #        node-version: '5.9.0'  # Node.js version compatible with NW.js 0.13.0
 
+    - name: Run microsoft
+      run: npm install --global --production windows-build-tools
+
     - name: Install nw-gyp
       run: npm install -g nw-gyp
 
