@@ -1,0 +1,32 @@
+name: Build SQLite for NW.js
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-2019  # Use a compatible Windows runner
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+#      with:
+#        node-version: '5.9.0'  # Node.js version compatible with NW.js 0.13.0
+
+    - name: Install nw-gyp
+      run: npm install -g nw-gyp
+
+    - name: Install SQLite3
+      run: |
+        npm install sqlite3@3 --build-from-source --target=0.13.0 --arch=ia32 --runtime=node-webkit
+
+#    - name: Build SQLite
+#      run: |
+#        cd node_modules/sqlite3
+#        nw-gyp configure --target=0.10.5 --arch=ia32
+#        nw-gyp build --target=0.10.5 --arch=ia32
